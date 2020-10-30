@@ -19,10 +19,10 @@ li,ul {
     background: #F8D030;
 }
 .poison {
-    background-color: #A040A0;
+    background: #A040A0;
 }
 .fighting {
-    background-color: #C03028;
+    background: #C03028;
 }
 .psychic{
     background: #F85888;
@@ -50,4 +50,7 @@ li,ul {
 }
 .dragon {
     background: #7038F8;
+}
+.flying {
+    background: #A890F0;
 }

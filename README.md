@@ -10,6 +10,9 @@
    <li>
     <p>Javascript</p>
   </li>
+   <li>
+    <p>Bootstrap</p>
+  </li>
 </ul>
 <p><a href="https://pokeapi.co/" target="_blank" >PokeApi</a></p>
 

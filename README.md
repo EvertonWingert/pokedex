@@ -16,4 +16,4 @@
 </ul>
 <p><a href="https://pokeapi.co/" target="_blank" >PokeApi</a></p>
 
-<p><a href="https://evertonwingert.github.io/Pokedex-JavaScript/" target="_blank">Online demo</a></p>
+<p><a href="https://evertonwingert.github.io/pokedex/" target="_blank">Online demo</a></p>

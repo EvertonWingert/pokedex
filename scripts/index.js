@@ -1,8 +1,8 @@
-//Variaveis
-var pokemonsUl = document.getElementById('pokemons');
+import { fetchPokemon } from './api/index.js'
+
+const pokemonsUl = document.getElementById('pokemons');
 const form = document.querySelector('form');
 const nextButton = document.getElementById('next');
-const previousButton = document.getElementById('previous');
 
 var pokemonList = [];
 var firstCard = 1;
@@ -13,31 +13,19 @@ var lastCard = perPage;
 init();
 
 //Eventos
-form.addEventListener('submit', event =>{
+form.addEventListener('submit', event => {
   event.preventDefault();
-  const inputValue = event.target.search.value;
-  console.log(inputValue);
-  search(inputValue);
+  search(event.target.search.value);
 });
-
-nextButton.addEventListener('click',next);
-previousButton.addEventListener('click',previous);
+nextButton.addEventListener('click', next);
 
 
-//Metodos
+//Métodos
 async function getPokemons() {
   for (let i = firstCard; i <= lastCard; i++) {
     pokemonList.push(await fetchPokemon(i));
   }
   render();
-}
-
-async function fetchPokemon(id) {
-  const URL = `https://pokeapi.co/api/v2/pokemon/${id}`;
-  const response = await fetch(URL);
-  const pokemon = await response.json();
-  return pokemon;
-  
 }
 
 function getTypes(pokemon) {
@@ -50,42 +38,42 @@ function getTypes(pokemon) {
   return spanHtml;
 }
 
-function isPokemon(pokemon){
-  return pokemon == pokemonList;
-}
 
-async function search(value){
+async function search(value) {
   pokemonsUl.innerHTML = '';
+  const loading = document.getElementById('spinner-search');
+  loading.classList.remove('d-none');
 
-  if(value == '') {
+  if (!value) {
     pokemonList = [];
     getPokemons();
     render();
     return
   }
 
-  try{
+  try {
     const pokemon = await fetchPokemon(value.toLowerCase());
     pokemonList = [];
     pokemonList.push(pokemon);
     render();
-  }catch(e){
+  } catch (e) {
     pokemonsUl.innerHTML = `
     <div class="alert alert-danger" role="alert">
       Alguma coisa deu errado!
     </div>
     `
+  } finally {
+    loading.classList.add('d-none');
   }
 }
 
 
-function render(){
-    pokemonList.forEach((pokemon) =>{
-      let typesHTML = getTypes(pokemon);
-      pokemonsUl.innerHTML += 
-      `
-        <li class="p-2 m-2 col-md-auto">
-          <div class="card  border-0 shadow-sm" style="width: 18rem;">
+function render() {
+  pokemonList.forEach((pokemon) => {
+    let typesHTML = getTypes(pokemon);
+    pokemonsUl.innerHTML += `
+        <li class="col ">
+          <div class="card border-0 shadow-sm" style="width: 18rem;">
             <div class="card-header">
               <h6 class="card-subtitle mb-2 text-muted">Nº ${pokemon.id}</h6>
             </div>
@@ -100,35 +88,29 @@ function render(){
         </div> 
         </li>
       `
-    });
+  });
 }
-function init(){
-  pokemonsUl.innerHTML = '';
+async function init() {
   pokemonList = [];
-  getPokemons();   
+  await getPokemons();
 }
 
 
 //Controle da paginação
-function next(){
+async function next() {
   firstCard = lastCard + 1;
   lastCard = lastCard + perPage;
 
-  if(firstCard > 250){
+  if (firstCard > 250) {
     return
   }
 
-  init();
+  const loading = document.getElementById('spinner-next');
+  loading.classList.remove('d-none');
+  await init();
+  loading.classList.add('d-none');
 }
-function previous(){
-  firstCard = firstCard - perPage;
-  lastCard = lastCard - perPage;
 
-  if(firstCard < 1){
-    return
-  }
-  init()
-}
 
 
 
